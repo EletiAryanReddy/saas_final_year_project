@@ -1,6 +1,8 @@
 import 'dotenv/config';
 
-const isProd = process.env.NODE_ENV === 'production';
+// Render sets RENDER=true automatically, so hosted deployments are always treated as production
+// (missing variables fail loudly instead of silently falling back to localhost defaults).
+const isProd = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 
 function get(key: string, devDefault?: string): string {
   const v = process.env[key];
