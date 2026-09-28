@@ -15,7 +15,7 @@ function get(key: string, devDefault?: string): string {
 export const env = {
   isProd,
   port: Number(process.env.PORT || 5000),
-  mongoUri: get('MONGODB_URI', 'mongodb+srv://<eletiaryanreddy_db_user>:ixVNeFryZEmGbkMW@cluster0.rxf45mp.mongodb.net/saas_db?retryWrites=true&w=majority&appName=Cluster0'),
+  mongoUri: get('MONGODB_URI', 'mongodb://127.0.0.1:27017/saas_db'),
   clientUrl: get('CLIENT_URL', 'http://localhost:3000'),
   accessSecret: get('JWT_ACCESS_SECRET', 'dev-access-secret'),
   refreshSecret: get('JWT_REFRESH_SECRET', 'dev-refresh-secret'),
