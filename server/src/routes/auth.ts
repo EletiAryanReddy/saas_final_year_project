@@ -32,7 +32,8 @@ const pw = z.string().min(8, 'Password must be at least 8 characters').max(100)
 async function issueSession(req: Request, res: Response, user: any) {
   const refresh = signRefresh(String(user._id));
   const fresh = await User.findById(user._id).select('+refreshTokens');
-  const tokens = (fresh!.refreshTokens || []).filter((t: any) => t.expiresAt > new Date()).slice(-4);
+ 
+  const tokens: any[] = ((fresh!.refreshTokens || []) as any[]).filter((t: any) => t.expiresAt > new Date()).slice(-4);
   tokens.push({ tokenHash: sha256(refresh), expiresAt: new Date(Date.now() + cookieOpts.maxAge), userAgent: String(req.headers['user-agent'] || '').slice(0, 120) });
   fresh!.set('refreshTokens', tokens);
   await fresh!.save();
