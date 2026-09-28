@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# environment files (never commit real secrets/API keys)
+.env
+.env.local
+.env.*.local
+
+# server build output & local uploads
+server/dist/
+server/uploads/
+
+# next.js build output
+client/.next/
+client/out/
+client/next-env.d.ts
+
+# logs
+*.log
+npm-debug.log*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# misc build artifacts
+coverage/
+.vercel/

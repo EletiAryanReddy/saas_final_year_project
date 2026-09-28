@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 241 244 241;
+  --surface: 255 255 255;
+  --surface-2: 232 238 234;
+  --ink: 21 34 43;
+  --muted: 94 107 115;
+  --line: 216 224 220;
+  --brand: 15 90 85;
+  --brand-ink: 255 255 255;
+  --accent: 242 182 50;
+  --danger: 200 68 58;
+  --ok: 31 138 91;
+  --info: 47 127 184;
+  --side: 11 48 46;
+  --side-ink: 214 232 227;
+}
+.dark {
+  --bg: 14 22 24;
+  --surface: 21 33 36;
+  --surface-2: 30 46 50;
+  --ink: 230 238 234;
+  --muted: 148 165 161;
+  --line: 38 54 60;
+  --brand: 74 186 170;
+  --brand-ink: 8 30 28;
+  --accent: 242 182 50;
+  --danger: 236 112 100;
+  --ok: 64 190 130;
+  --info: 100 168 222;
+  --side: 9 24 26;
+  --side-ink: 200 220 215;
+}
+
+html, body { height: 100%; }
+body { @apply bg-bg font-sans text-ink antialiased; }
+h1, h2, h3, .font-display { font-family: var(--font-display), system-ui, sans-serif; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid rgb(var(--brand)); outline-offset: 2px; }
+::selection { background: rgb(var(--accent) / 0.45); }
+
+@layer components {
+  .card { @apply rounded-xl border border-line bg-surface; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-brand text-brand-ink hover:opacity-90; }
+  .btn-ghost { @apply btn border border-line bg-surface text-ink hover:bg-surface2; }
+  .btn-danger { @apply btn bg-danger text-white hover:opacity-90; }
+  .btn-quiet { @apply btn text-muted hover:bg-surface2 hover:text-ink; }
+  .input { @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/70 focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand; }
+  .label { @apply mb-1 block text-xs font-medium text-muted; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
