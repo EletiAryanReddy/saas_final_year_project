@@ -38,7 +38,13 @@ async function request<T>(method: string, path: string, body?: any, opts: { form
   if (body !== undefined && !opts.form) headers['Content-Type'] = 'application/json';
   // uploads can bypass the Next.js proxy (some hosts cap proxied body size); auth is via Bearer so CORS is fine
   const base = opts.form && process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api` : '/api';
-  const res = await fetch(base + path, { method, headers, credentials: 'include', body: body === undefined ? undefined : opts.form ? body : JSON.stringify(body) });
+
+  let res: Response;
+  try {
+    res = await fetch(base + path, { method, headers, credentials: 'include', body: body === undefined ? undefined : opts.form ? body : JSON.stringify(body) });
+  } catch {
+    throw new ApiError(0, 'Cannot reach the server. Check your connection, or that the backend is running.', 'NETWORK');
+  }
 
   if (res.status === 401 && opts.retry !== false && !path.startsWith('/auth/login') && !path.startsWith('/auth/refresh')) {
     const s = await refreshSession();
@@ -48,7 +54,13 @@ async function request<T>(method: string, path: string, body?: any, opts: { form
   if (!res.ok) {
     let j: any = null;
     try { j = await res.json(); } catch { /* not json */ }
-    throw new ApiError(res.status, j?.message || res.statusText || 'Request failed', j?.code);
+    throw new ApiError(
+      res.status,
+      j?.message || (res.status >= 500
+        ? `The server is unavailable (HTTP ${res.status}). It may be starting up or misconfigured - try again in a minute.`
+        : `Request failed (HTTP ${res.status})`),
+      j?.code
+    );
   }
   if (opts.blob) return (await res.blob()) as any;
   return (res.status === 204 ? null : await res.json()) as T;
