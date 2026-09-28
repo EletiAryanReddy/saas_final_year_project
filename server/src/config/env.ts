@@ -9,7 +9,12 @@ function get(key: string, devDefault?: string): string {
   if (v) return v;
   if (!isProd && devDefault !== undefined) return devDefault;
   if (devDefault === '') return '';
-  throw new Error(`Missing required environment variable: ${key}`);
+  const prefix = key.slice(0, 5).toUpperCase();
+  const similar = Object.keys(process.env).filter((k) => k.toUpperCase().includes(prefix) || k.trim() !== k);
+  throw new Error(
+    `Missing required environment variable: ${key}. ` +
+    (similar.length ? `Similar names found: ${similar.map((k) => JSON.stringify(k)).join(', ')}` : 'No similar variable names exist on this service.')
+  );
 }
 
 export const env = {
